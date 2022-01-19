@@ -34,4 +34,9 @@ GOPATH/src/github.com/leonklingele/grouper/pkg/analyzer/flags.go:3:1: should onl
     	require the use of grouped global 'type' declarations
   -type-require-single-type
     	require the use of a single global 'type' declaration only
+
+  -var-require-grouping
+    	require the use of grouped global 'var' declarations
+  -var-require-single-var
+    	require the use of a single global 'var' declaration only
 ```

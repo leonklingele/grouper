@@ -13,6 +13,9 @@ const (
 
 	FlagNameTypeRequireSingleType = "type-require-single-type"
 	FlagNameTypeRequireGrouping   = "type-require-grouping"
+
+	FlagNameVarRequireSingleVar = "var-require-single-var"
+	FlagNameVarRequireGrouping  = "var-require-grouping"
 )
 
 func Flags() flag.FlagSet {
@@ -26,6 +29,9 @@ func Flags() flag.FlagSet {
 
 	fs.Bool(FlagNameTypeRequireSingleType, false, "require the use of a single global 'type' declaration only")
 	fs.Bool(FlagNameTypeRequireGrouping, false, "require the use of grouped global 'type' declarations")
+
+	fs.Bool(FlagNameVarRequireSingleVar, false, "require the use of a single global 'var' declaration only")
+	fs.Bool(FlagNameVarRequireGrouping, false, "require the use of grouped global 'var' declarations")
 
 	return *fs
 }
