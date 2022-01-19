@@ -12,6 +12,78 @@ import (
 
 // TODO(leon): Add fuzzing
 
+func TestConst(t *testing.T) {
+	t.Parallel()
+
+	fixtures := []struct {
+		name  string
+		flags flag.FlagSet
+	}{
+		{
+			name: "single-grouped",
+			flags: flags().
+				withConstRequireGrouping().
+				build(),
+		},
+		{
+			name: "single-ungrouped",
+			flags: flags().
+				withConstRequireGrouping().
+				build(),
+		},
+
+		{
+			name: "multi-grouped",
+			flags: flags().
+				withConstRequireSingleConst().
+				withConstRequireGrouping().
+				build(),
+		},
+		{
+			name: "multi-ungrouped",
+			flags: flags().
+				withConstRequireSingleConst().
+				withConstRequireGrouping().
+				build(),
+		},
+
+		{
+			name: "mixed-require-single-const",
+			flags: flags().
+				withConstRequireSingleConst().
+				build(),
+		},
+		{
+			name: "mixed-require-grouping",
+			flags: flags().
+				withConstRequireGrouping().
+				build(),
+		},
+
+		{
+			name: "mixed-named-with-vars",
+			flags: flags().
+				withConstRequireSingleConst().
+				withConstRequireGrouping().
+				build(),
+		},
+	}
+
+	for _, f := range fixtures {
+		f := f
+
+		t.Run(f.name, func(t *testing.T) {
+			t.Parallel()
+
+			a := analyzer.New()
+			a.Flags = f.flags
+
+			testdata := filepath.Join(analysistest.TestData(), "const")
+			_ = analysistest.Run(t, testdata, a, f.name)
+		})
+	}
+}
+
 func TestImport(t *testing.T) {
 	t.Parallel()
 
@@ -91,6 +163,22 @@ func TestImport(t *testing.T) {
 
 type flagger struct {
 	fs *flag.FlagSet
+}
+
+func (f *flagger) withConstRequireSingleConst() *flagger {
+	if err := f.fs.Lookup(analyzer.FlagNameConstRequireSingleConst).Value.Set("true"); err != nil {
+		panic(err)
+	}
+
+	return f
+}
+
+func (f *flagger) withConstRequireGrouping() *flagger {
+	if err := f.fs.Lookup(analyzer.FlagNameConstRequireGrouping).Value.Set("true"); err != nil {
+		panic(err)
+	}
+
+	return f
 }
 
 func (f *flagger) withImportRequireSingleImport() *flagger {

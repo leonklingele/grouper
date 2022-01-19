@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/ast"
 
+	"github.com/leonklingele/grouper/pkg/analyzer/consts"
 	"github.com/leonklingele/grouper/pkg/analyzer/imports"
 
 	"golang.org/x/tools/go/analysis"
@@ -31,6 +32,11 @@ func run(p *analysis.Pass) (interface{}, error) {
 	}
 
 	c := &Config{
+		ConstsConfig: &consts.Config{
+			RequireSingleConst: flagLookupBool(FlagNameConstRequireSingleConst),
+			RequireGrouping:    flagLookupBool(FlagNameConstRequireGrouping),
+		},
+
 		ImportsConfig: &imports.Config{
 			RequireSingleImport: flagLookupBool(FlagNameImportRequireSingleImport),
 			RequireGrouping:     flagLookupBool(FlagNameImportRequireGrouping),
@@ -51,6 +57,10 @@ func pass(c *Config, p *analysis.Pass) error {
 }
 
 func filepass(c *Config, p *analysis.Pass, f *ast.File) error {
+	if err := consts.Filepass(c.ConstsConfig, p, f); err != nil {
+		return fmt.Errorf("failed to consts.Filepass: %w", err)
+	}
+
 	if err := imports.Filepass(c.ImportsConfig, p, f); err != nil {
 		return fmt.Errorf("failed to imports.Filepass: %w", err)
 	}
