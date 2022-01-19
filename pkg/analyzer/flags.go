@@ -10,6 +10,9 @@ const (
 
 	FlagNameImportRequireSingleImport = "import-require-single-import"
 	FlagNameImportRequireGrouping     = "import-require-grouping"
+
+	FlagNameTypeRequireSingleType = "type-require-single-type"
+	FlagNameTypeRequireGrouping   = "type-require-grouping"
 )
 
 func Flags() flag.FlagSet {
@@ -20,6 +23,9 @@ func Flags() flag.FlagSet {
 
 	fs.Bool(FlagNameImportRequireSingleImport, false, "require the use of a single 'import' declaration only")
 	fs.Bool(FlagNameImportRequireGrouping, false, "require the use of grouped 'import' declarations")
+
+	fs.Bool(FlagNameTypeRequireSingleType, false, "require the use of a single global 'type' declaration only")
+	fs.Bool(FlagNameTypeRequireGrouping, false, "require the use of grouped global 'type' declarations")
 
 	return *fs
 }

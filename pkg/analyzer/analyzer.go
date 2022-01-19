@@ -6,6 +6,7 @@ import (
 
 	"github.com/leonklingele/grouper/pkg/analyzer/consts"
 	"github.com/leonklingele/grouper/pkg/analyzer/imports"
+	"github.com/leonklingele/grouper/pkg/analyzer/types"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -41,6 +42,11 @@ func run(p *analysis.Pass) (interface{}, error) {
 			RequireSingleImport: flagLookupBool(FlagNameImportRequireSingleImport),
 			RequireGrouping:     flagLookupBool(FlagNameImportRequireGrouping),
 		},
+
+		TypesConfig: &types.Config{
+			RequireSingleType: flagLookupBool(FlagNameTypeRequireSingleType),
+			RequireGrouping:   flagLookupBool(FlagNameTypeRequireGrouping),
+		},
 	}
 
 	return nil, pass(c, p)
@@ -63,6 +69,10 @@ func filepass(c *Config, p *analysis.Pass, f *ast.File) error {
 
 	if err := imports.Filepass(c.ImportsConfig, p, f); err != nil {
 		return fmt.Errorf("failed to imports.Filepass: %w", err)
+	}
+
+	if err := types.Filepass(c.TypesConfig, p, f); err != nil {
+		return fmt.Errorf("failed to types.Filepass: %w", err)
 	}
 
 	return nil

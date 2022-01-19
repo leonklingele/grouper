@@ -161,6 +161,70 @@ func TestImport(t *testing.T) {
 	}
 }
 
+func TestType(t *testing.T) {
+	t.Parallel()
+
+	fixtures := []struct {
+		name  string
+		flags flag.FlagSet
+	}{
+		{
+			name: "single-grouped",
+			flags: flags().
+				withTypeRequireGrouping().
+				build(),
+		},
+		{
+			name: "single-ungrouped",
+			flags: flags().
+				withTypeRequireGrouping().
+				build(),
+		},
+
+		{
+			name: "multi-grouped",
+			flags: flags().
+				withTypeRequireSingleType().
+				withTypeRequireGrouping().
+				build(),
+		},
+		{
+			name: "multi-ungrouped",
+			flags: flags().
+				withTypeRequireSingleType().
+				withTypeRequireGrouping().
+				build(),
+		},
+
+		{
+			name: "mixed-require-single-type",
+			flags: flags().
+				withTypeRequireSingleType().
+				build(),
+		},
+		{
+			name: "mixed-require-grouping",
+			flags: flags().
+				withTypeRequireGrouping().
+				build(),
+		},
+	}
+
+	for _, f := range fixtures {
+		f := f
+
+		t.Run(f.name, func(t *testing.T) {
+			t.Parallel()
+
+			a := analyzer.New()
+			a.Flags = f.flags
+
+			testdata := filepath.Join(analysistest.TestData(), "type")
+			_ = analysistest.Run(t, testdata, a, f.name)
+		})
+	}
+}
+
 type flagger struct {
 	fs *flag.FlagSet
 }
@@ -191,6 +255,22 @@ func (f *flagger) withImportRequireSingleImport() *flagger {
 
 func (f *flagger) withImportRequireGrouping() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameImportRequireGrouping).Value.Set("true"); err != nil {
+		panic(err)
+	}
+
+	return f
+}
+
+func (f *flagger) withTypeRequireSingleType() *flagger {
+	if err := f.fs.Lookup(analyzer.FlagNameTypeRequireSingleType).Value.Set("true"); err != nil {
+		panic(err)
+	}
+
+	return f
+}
+
+func (f *flagger) withTypeRequireGrouping() *flagger {
+	if err := f.fs.Lookup(analyzer.FlagNameTypeRequireGrouping).Value.Set("true"); err != nil {
 		panic(err)
 	}
 
