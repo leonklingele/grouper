@@ -15,7 +15,7 @@ type Global struct {
 
 func Filepass(
 	p *analysis.Pass, f *ast.File,
-	token token.Token, requireSingle, requireGrouping bool,
+	tkn token.Token, requireSingle, requireGrouping bool,
 ) error {
 	var globals []*Global
 	for _, decl := range f.Decls {
@@ -24,7 +24,7 @@ func Filepass(
 			continue
 		}
 
-		if genDecl.Tok == token {
+		if genDecl.Tok == tkn {
 			globals = append(globals, &Global{
 				Decl:    genDecl,
 				IsGroup: genDecl.Lparen != 0,
@@ -39,17 +39,23 @@ func Filepass(
 	}
 
 	if requireSingle && numGlobals > 1 {
-		msg := fmt.Sprintf("should only use a single global '%s' declaration, %d found", token.String(), numGlobals)
-		firstdup := globals[1]
+		msg := fmt.Sprintf("should only use a single global '%s' declaration, %d found", tkn.String(), numGlobals)
+		dups := globals[1:]
+		firstdup := dups[0]
 		decl := firstdup.Decl
 
-		p.Report(analysis.Diagnostic{ //nolint:exhaustivestruct // we do not need all fields
+		report := analysis.Diagnostic{ //nolint:exhaustivestruct // we do not need all fields
 			Pos:     decl.Pos(),
 			End:     decl.End(),
 			Message: msg,
-			Related: toRelated(globals[1:]),
 			// TODO(leon): Suggest fix
-		})
+		}
+
+		if len(dups) > 1 {
+			report.Related = toRelated(dups[1:])
+		}
+
+		p.Report(report)
 	}
 
 	if requireGrouping {
@@ -61,7 +67,7 @@ func Filepass(
 		}
 
 		if numUngrouped := len(ungrouped); numUngrouped != 0 {
-			msg := fmt.Sprintf("should only use grouped global '%s' declarations", token.String())
+			msg := fmt.Sprintf("should only use grouped global '%s' declarations", tkn.String())
 			firstmatch := ungrouped[0]
 			decl := firstmatch.Decl
 

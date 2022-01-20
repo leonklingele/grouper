@@ -38,16 +38,22 @@ func Filepass(c *Config, p *analysis.Pass, f *ast.File) error {
 
 	if c.RequireSingleImport && numImports > 1 {
 		msg := fmt.Sprintf("should only use a single 'import' declaration, %d found", numImports)
-		firstdup := imports[1]
+		dups := imports[1:]
+		firstdup := dups[0]
 		decl := firstdup.Decl
 
-		p.Report(analysis.Diagnostic{ //nolint:exhaustivestruct // we do not need all fields
+		report := analysis.Diagnostic{ //nolint:exhaustivestruct // we do not need all fields
 			Pos:     decl.Pos(),
 			End:     decl.End(),
 			Message: msg,
-			Related: toRelated(imports[1:]),
 			// TODO(leon): Suggest fix
-		})
+		}
+
+		if len(dups) > 1 {
+			report.Related = toRelated(dups[1:])
+		}
+
+		p.Report(report)
 	}
 
 	if c.RequireGrouping {
