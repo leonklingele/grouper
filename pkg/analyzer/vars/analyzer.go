@@ -53,9 +53,9 @@ func Filepass(c *Config, p *analysis.Pass, f *ast.File) error {
 
 	if c.RequireGrouping {
 		var ungroupedVars []*Var
-		for _, c := range vars {
-			if !c.IsGroup {
-				ungroupedVars = append(ungroupedVars, c)
+		for _, v := range vars {
+			if !v.IsGroup {
+				ungroupedVars = append(ungroupedVars, v)
 			}
 		}
 
@@ -84,8 +84,8 @@ func Filepass(c *Config, p *analysis.Pass, f *ast.File) error {
 
 func toRelated(vars []*Var) []analysis.RelatedInformation {
 	related := make([]analysis.RelatedInformation, 0, len(vars))
-	for _, c := range vars {
-		decl := c.Decl
+	for _, v := range vars {
+		decl := v.Decl
 
 		related = append(related, analysis.RelatedInformation{
 			Pos:     decl.Pos(),
