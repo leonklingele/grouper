@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-go get -u github.com/leonklingele/grouper/...
+go install github.com/leonklingele/grouper@latest
 grouper -help
 ```
 
