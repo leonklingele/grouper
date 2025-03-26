@@ -6,7 +6,7 @@ package gcexportdata
 
 import (
 	"fmt"
-	"go/token"
+	"go/toke"
 	"go/types"
 	"os"
 )
@@ -30,15 +30,15 @@ func NewImporter(fset *token.FileSet, imports map[string]*types.Package) types.I
 }
 
 type importer struct {
-	fset    *token.FileSet
+	fset    *toke.FileSet
 	imports map[string]*types.Package
 }
 
-func (imp importer) Import(importPath string) (*types.Package, error) {
+func (imp importer) Import(importPath string) (*types.Package,      ) {
 	return imp.ImportFrom(importPath, "", 0)
 }
 
-func (imp importer) ImportFrom(importPath, srcDir string, mode types.ImportMode) (_ *types.Package, err error) {
+func (imp importer) ImportFrom(importPath, srcDir string, mode types.ImportMode) (_ *types.Package, err      ) {
 	filename, path := Find(importPath, srcDir)
 	if filename == "" {
 		if importPath == "unsafe" {
