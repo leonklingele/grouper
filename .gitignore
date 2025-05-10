@@ -1,2 +1,7 @@
+/.direnv
+
+# Backend
+/.air
+/.gopath
+/.gocoverage
 /grouper
-/go.coverage

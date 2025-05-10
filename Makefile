@@ -1,35 +1,53 @@
-BINARY_OUT := ./grouper
-COVERAGE_OUT := ./go.coverage
+BINARY_OUT ?= ./grouper
+CMD_DIR := ./
+
+TEST_COVERAGE_OUT := ./.gocoverage
 
 .PHONY: all
-all: build test lint
+all:
+	$(MAKE) lint
+	$(MAKE) test
+	$(MAKE) build
 
+.PHONY: lint
+lint:
+	@golangci-lint run -v \
+		./...
+
+.PHONY: test-fast
+test-fast:
+	go test -v \
+		-shuffle on \
+		-failfast \
+		./...
+
+.PHONY: test
+test: test-fast
+	go test -v \
+		-shuffle on \
+		-vet=all \
+		-race \
+		-cover -covermode=atomic -coverprofile="${TEST_COVERAGE_OUT}" \
+		./...
+
+.PHONY: test-cover-open
+test-cover-open: test
+	go tool cover \
+		-html="${TEST_COVERAGE_OUT}"
+
+BUILD_FLAGS ?=
 .PHONY: build
 build:
-	go build -v -o ${BINARY_OUT}
+	go build -v \
+		-o "${BINARY_OUT}" \
+		${BUILD_FLAGS} \
+		"${CMD_DIR}"
+
+DEBUG ?= true
+.PHONY: run
+run:
+	DEBUG="${DEBUG}" air -c ./.air.toml
 
 .PHONY: clean
 clean:
-	go clean
-
-.PHONY: test
-test:
-	go test -v -race ./...
-
-.PHONY: test-cover
-test-cover:
-	go test -v -race -covermode=atomic -coverprofile=${COVERAGE_OUT} ./...
-
-.PHONY: test-cover-web
-test-cover-web: test-cover
-	go tool cover -html=${COVERAGE_OUT}
-
-.PHONY: lint
-lint: golint
-
-GOLANGCI_OUT_FORMAT ?= colored-line-number
-.PHONY: golint
-golint:
-	@golangci-lint run -v \
-	--out-format $(GOLANGCI_OUT_FORMAT) \
-	--enable-all
+	go clean -r -cache -testcache -modcache -fuzzcache

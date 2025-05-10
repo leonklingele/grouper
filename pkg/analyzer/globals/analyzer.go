@@ -13,10 +13,11 @@ type Global struct {
 	IsGroup bool
 }
 
+//nolint:revive // We explicitly want to have bool control flags here
 func Filepass(
 	p *analysis.Pass, f *ast.File,
 	tkn token.Token, requireSingle, requireGrouping bool,
-) error {
+) error { //nolint:unparam // Need to satisfy the filepass interface
 	var globals []*Global
 	for _, decl := range f.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
