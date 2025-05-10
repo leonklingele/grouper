@@ -1,5 +1,7 @@
 # grouper — a Go linter to analyze expression groups
 
+![build](https://github.com/leonklingele/grouper/actions/workflows/build.yml/badge.svg)
+
 ## Installation
 
 ```sh

@@ -30,7 +30,7 @@ func New() *analysis.Analyzer {
 	}
 }
 
-func run(p *analysis.Pass) (interface{}, error) {
+func run(p *analysis.Pass) (any, error) {
 	flagLookupBool := func(name string) bool {
 		return p.Analyzer.Flags.Lookup(name).Value.String() == "true"
 	}

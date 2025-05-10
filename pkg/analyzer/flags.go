@@ -1,7 +1,7 @@
 package analyzer
 
 import (
-	"flag"
+	"flag" //nolint:depguard // Importing the flag package is fine here
 )
 
 const (

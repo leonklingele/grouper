@@ -15,7 +15,7 @@ type Import struct {
 	IsGroup bool
 }
 
-func Filepass(c *Config, p *analysis.Pass, f *ast.File) error {
+func Filepass(c *Config, p *analysis.Pass, f *ast.File) error { //nolint:unparam // Need to satisfy the filepass interface
 	var imports []*Import
 	ast.Inspect(f, func(n ast.Node) bool {
 		if decl, ok := n.(*ast.GenDecl); ok {

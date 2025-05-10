@@ -1,7 +1,7 @@
 package analyzer_test
 
 import (
-	"flag"
+	"flag" //nolint:depguard // Importing the flag package is fine here
 	"path/filepath"
 	"testing"
 
@@ -70,8 +70,6 @@ func TestConst(t *testing.T) {
 	}
 
 	for _, f := range fixtures {
-		f := f
-
 		t.Run(f.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -147,8 +145,6 @@ func TestImport(t *testing.T) {
 	}
 
 	for _, f := range fixtures {
-		f := f
-
 		t.Run(f.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -211,8 +207,6 @@ func TestType(t *testing.T) {
 	}
 
 	for _, f := range fixtures {
-		f := f
-
 		t.Run(f.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -290,8 +284,6 @@ func TestVar(t *testing.T) {
 	}
 
 	for _, f := range fixtures {
-		f := f
-
 		t.Run(f.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -310,7 +302,7 @@ type flagger struct {
 
 func (f *flagger) withConstRequireSingleConst() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameConstRequireSingleConst).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -318,7 +310,7 @@ func (f *flagger) withConstRequireSingleConst() *flagger {
 
 func (f *flagger) withConstRequireGrouping() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameConstRequireGrouping).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -326,7 +318,7 @@ func (f *flagger) withConstRequireGrouping() *flagger {
 
 func (f *flagger) withImportRequireSingleImport() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameImportRequireSingleImport).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -334,7 +326,7 @@ func (f *flagger) withImportRequireSingleImport() *flagger {
 
 func (f *flagger) withImportRequireGrouping() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameImportRequireGrouping).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -342,7 +334,7 @@ func (f *flagger) withImportRequireGrouping() *flagger {
 
 func (f *flagger) withTypeRequireSingleType() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameTypeRequireSingleType).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -350,7 +342,7 @@ func (f *flagger) withTypeRequireSingleType() *flagger {
 
 func (f *flagger) withTypeRequireGrouping() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameTypeRequireGrouping).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -358,7 +350,7 @@ func (f *flagger) withTypeRequireGrouping() *flagger {
 
 func (f *flagger) withVarRequireSingleVar() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameVarRequireSingleVar).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
@@ -366,7 +358,7 @@ func (f *flagger) withVarRequireSingleVar() *flagger {
 
 func (f *flagger) withVarRequireGrouping() *flagger {
 	if err := f.fs.Lookup(analyzer.FlagNameVarRequireGrouping).Value.Set("true"); err != nil {
-		panic(err)
+		panic(err) //nolint:forbidigo // Somewhat fine to panic in tests
 	}
 
 	return f
