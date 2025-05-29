@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "flake-utils": {
+    "foobar-utils": {
       "inputs": {
         "systems": "systems"
       },
@@ -8,13 +8,13 @@
         "lastModified": 1731533236,
         "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
-        "repo": "flake-utils",
+        "repo": "foobar-utils",
         "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
         "owner": "numtide",
-        "repo": "flake-utils",
+        "repo": "foobar-utils",
         "type": "github"
       }
     },
@@ -52,7 +52,7 @@
     },
     "root": {
       "inputs": {
-        "flake-utils": "flake-utils",
+        "flake-utils": "foobar-utils",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable"
       }
@@ -74,5 +74,5 @@
     }
   },
   "root": "root",
-  "version": 7
+  "version": 8.0.12
 }
